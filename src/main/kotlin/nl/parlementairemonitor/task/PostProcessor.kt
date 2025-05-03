@@ -4,6 +4,7 @@ import jakarta.xml.bind.JAXBElement
 import nl.parlementairemonitor.hook.FractieHook
 import nl.parlementairemonitor.hook.MotieHook
 import nl.parlementairemonitor.hook.PersoonHook
+import nl.parlementairemonitor.hook.StemmingHook
 
 class PostProcessor {
 
@@ -12,6 +13,7 @@ class PostProcessor {
             FractieHook(),
             MotieHook(),
             PersoonHook(),
+            StemmingHook(),
         )
 
         suspend fun process(content: JAXBElement<*>) {

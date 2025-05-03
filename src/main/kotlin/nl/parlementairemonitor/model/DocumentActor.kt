@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DocumentActor(
     @SerialName("_id") val id: String,
-    val actorNaam: String?,
-    val actorFractie: String?,
-    val functie: String?,
-    val relatie: String?,
+    val actorNaam: String? = null,
+    val actorFractie: String? = null,
+    val functie: String? = null,
+    val relatie: String? = null,
 )

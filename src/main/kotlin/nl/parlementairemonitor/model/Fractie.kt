@@ -7,12 +7,12 @@ import nl.parlementairemonitor.TimestampSerializer
 @Serializable
 data class Fractie (
     @SerialName("_id") val id: String,
-    val afkorting: String?,
-    val naamNl: String?,
-    val naamEn: String?,
-    val aantalZetels: Int?,
-    @Serializable(TimestampSerializer::class) val datumActief: Long?,
-    @Serializable(TimestampSerializer::class) val datumInactief: Long?,
-    val zetels: List<Zetel>?,
+    val afkorting: String? = null,
+    val naamNl: String? = null,
+    val naamEn: String? = null,
+    val aantalZetels: Int? = null,
+    val datumActief: @Serializable(TimestampSerializer::class) Long? = null,
+    val datumInactief: @Serializable(TimestampSerializer::class) Long? = null,
+    val zetels: List<Zetel>? = null,
 )
 

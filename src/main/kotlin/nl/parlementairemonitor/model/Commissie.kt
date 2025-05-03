@@ -10,16 +10,16 @@ import nl.parlementairemonitor.util.FilterUtil
 @Serializable
 data class Commissie(
     @SerialName("_id") val id: String,
-    val soort: String?,
-    val afkorting: String?,
-    val naamNl: String?,
-    val naamEn: String?,
-    val naamWebNl: String?,
-    val naamWebEn: String?,
-    val inhoudsopgave: String?,
-    @Serializable(TimestampSerializer::class) val datumActief: Long?,
-    @Serializable(TimestampSerializer::class) val datumInactief: Long?,
-    val zetels: List<CommissieZetel>?,
+    val soort: String? = null,
+    val afkorting: String? = null,
+    val naamNl: String? = null,
+    val naamEn: String? = null,
+    val naamWebNl: String? = null,
+    val naamWebEn: String? = null,
+    val inhoudsopgave: String? = null,
+    val datumActief: @Serializable(TimestampSerializer::class) Long? = null,
+    val datumInactief: @Serializable(TimestampSerializer::class) Long? = null,
+    val zetels: List<CommissieZetel>? = null,
 ) {
     companion object {
         fun filter(call: RoutingCall): Filter<Commissie> {
