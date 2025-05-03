@@ -12,6 +12,7 @@ import nl.parlementairemonitor.RouterGroup
 import nl.parlementairemonitor.model.ProcessQueueRequest
 import nl.parlementairemonitor.model.ProcessQueueResponse
 import nl.parlementairemonitor.service.AdminService
+import org.bson.Document
 
 val adminRoutes: RouterGroup = {
 
@@ -31,11 +32,15 @@ val adminRoutes: RouterGroup = {
                             description = "Items to be added"
                             required = true
                             example("Add Documents with soort Motie") {
-                                value = mapOf(
-                                    "collection" to "Document",
-                                    "filter" to mapOf("soort" to mapOf("\$eq" to "Motie")),
-                                    "delay" to "15m",
-                                    "dryRun" to "true",
+                                value = ProcessQueueRequest(
+                                    collection = "Document",
+                                    filter = Document(
+                                        mapOf(
+                                            "soort" to mapOf("\$eq" to "Motie"),
+                                        )
+                                    ),
+                                    delay = "15m",
+                                    dryRun = true,
                                 )
                             }
                         }
@@ -46,6 +51,9 @@ val adminRoutes: RouterGroup = {
                             body<ProcessQueueResponse> {
                                 description = "number of items"
                                 required = true
+                                example("Count") {
+                                    value = ProcessQueueResponse(9876)
+                                }
                             }
                         }
                     }
@@ -64,6 +72,9 @@ val adminRoutes: RouterGroup = {
                             body<ProcessQueueResponse> {
                                 required = true
                                 description = "number of deleted items"
+                                example("Count") {
+                                    value = ProcessQueueResponse(9876)
+                                }
                             }
                         }
                     }

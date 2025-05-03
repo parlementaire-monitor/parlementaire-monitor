@@ -38,11 +38,11 @@ class MotieHook : PostProcessor.Hook {
         return MotieTask(document)
     }
 
-    class MotieTask(private val document: DocumentType) : DownloadTask(document) {
+    private val database by lazy {
+        MongoDb.getDatabase()
+    }
 
-        private val database by lazy {
-            MongoDb.getDatabase()
-        }
+    inner class MotieTask(private val document: DocumentType) : DownloadTask(document) {
 
         override suspend fun postDownload() {
             val motie = when (document.contentType) {

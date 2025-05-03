@@ -1,6 +1,5 @@
 package nl.parlementairemonitor.service
 
-import com.mongodb.MongoClientSettings
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.MergeOptions
@@ -9,7 +8,6 @@ import com.mongodb.client.model.MergeOptions.WhenNotMatched.INSERT
 import com.mongodb.client.model.Projections
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.toList
-import kotlinx.serialization.json.Json
 import nl.parlementairemonitor.MongoDb
 import nl.parlementairemonitor.model.ProcessQueueRequest
 import org.bson.Document
@@ -23,8 +21,7 @@ object AdminService {
 
     suspend fun addQueueItems(request: ProcessQueueRequest): Int {
         val collection = database.getCollection<Document>(request.collection)
-        val filterDoc = Document.parse(Json.encodeToString(request.filter))
-        val filter = filterDoc.toBsonDocument(Document::class.java, MongoClientSettings.getDefaultCodecRegistry())
+        val filter = request.filter.toBsonDocument()
         val queueTime = Instant.now().toEpochMilli()
         val processAfter = queueTime + Duration.parse(request.delay).inWholeMilliseconds
         if (request.dryRun) {
