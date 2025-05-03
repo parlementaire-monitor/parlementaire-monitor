@@ -39,7 +39,7 @@ java.targetCompatibility = JavaVersion.VERSION_20
 
 jib {
     dockerClient {
-        executable = "/usr/local/bin/docker"
+        executable = "/usr/bin/docker"
     }
     from {
         platforms {
