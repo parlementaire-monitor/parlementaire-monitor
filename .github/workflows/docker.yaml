@@ -17,9 +17,19 @@ jobs:
 
     - name: Checkout repository
       uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 20
+        
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v4
+      
+    - name: Build FatJar with Gradle
+      run: ./gradlew buildFatJar
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+    - name: Build Docker Image with Gradle
+      run: ./gradlew jibDockerBuild
 
-    - name: Build the Docker image
-      run: docker buildx build --platform linux/arm64,linux/amd64 --tag $IMAGE_NAME:${{ github.ref_name }} .
