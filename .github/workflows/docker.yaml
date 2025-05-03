@@ -5,13 +5,13 @@ on:
     types: [ published ]
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
-  build-jar:
+  build:
     runs-on: ubuntu-latest
-    
-    env:
-      REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}
     
     steps:
 
@@ -36,10 +36,16 @@ jobs:
         name: parlementaire-monitor-all-${{ github.ref_name }}.jar
         path: build/libs/ParlementaireMonitor-all.jar
 
-  build-image:
+  docker:
     runs-on: ubuntu-latest
-    needs: build-jar
+    needs: build
 
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    
     steps:
 
     - name: Download a Build Artifact
@@ -47,12 +53,18 @@ jobs:
       with:
         name: parlementaire-monitor-all-${{ github.ref_name }}.jar
 
-    - name: Login to GHCR
-      uses: docker/login-action@v3
+    - name: Log in to the Container registry
+      uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
       with:
-        registry: ghcr.io
-        username: ${{ github.repository_owner }}
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -63,6 +75,15 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
+        context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ${{ github.repository }}:${{ github.ref_name }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        
+    - name: Generate artifact attestation
+      uses: actions/attest-build-provenance@v2
+      with:
+        subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+        subject-digest: ${{ steps.push.outputs.digest }}
+        push-to-registry: true
