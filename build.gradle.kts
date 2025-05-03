@@ -1,4 +1,9 @@
+import io.ktor.plugin.features.DockerImageRegistry
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 val kotlin_version: String by project
+val kotlin_css_version: String by project
 val logback_version: String by project
 val mongo_version: String by project
 val prometheus_version: String by project
@@ -25,9 +30,16 @@ xjc {
     xjcVersion.set("3.0")
 }
 
+kotlin.compilerOptions.apiVersion = KotlinVersion.KOTLIN_2_1
+kotlin.compilerOptions.languageVersion = KotlinVersion.KOTLIN_2_1
+kotlin.compilerOptions.jvmTarget = JvmTarget.JVM_20
+
+java.sourceCompatibility = JavaVersion.VERSION_20
+java.targetCompatibility = JavaVersion.VERSION_20
+
 jib {
     dockerClient {
-        executable = "/usr/local/bin/docker"
+        executable = "/usr/bin/docker"
     }
     from {
         platforms {
@@ -43,12 +55,11 @@ jib {
     }
     to {
         image = "nilsbrenkman/parlementaire-monitor"
-        tags = setOf("latest", "$version")
+        tags = setOf("$version")
     }
     container {
-        user = "1001:1001"
+        user = "1000:1000"
         mainClass = "io.ktor.server.netty.EngineMain"
-        ports = listOf("8080")
     }
 }
 
@@ -105,12 +116,12 @@ dependencies {
 
 tasks.withType<JavaExec>().configureEach {
     file(".env").takeIf { it.exists() }
-            ?.readLines()
-            ?.filter { it.isNotEmpty() }
-            ?.forEach { s ->
-        val (key, value) = s.split("=")
-        environment(key to value)
-    }
+        ?.readLines()
+        ?.filter { it.isNotEmpty() }
+        ?.forEach { s ->
+            val (key, value) = s.split("=")
+            environment(key to value)
+        }
 }
 
 tasks.withType<Test>().configureEach {

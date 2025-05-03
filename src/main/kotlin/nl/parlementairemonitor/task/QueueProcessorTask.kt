@@ -18,13 +18,7 @@ import nl.parlementairemonitor.util.SyncFeedUtil
 import org.slf4j.LoggerFactory
 import java.time.Instant
 
-class QueueProcessorTask private constructor() {
-
-    companion object {
-        val INSTANCE: QueueProcessorTask by lazy {
-            QueueProcessorTask()
-        }
-    }
+object QueueProcessorTask {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
