@@ -72,6 +72,9 @@ jobs:
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
 
+    - name: LS
+      run: ls && ls "$GITHUB_WORKSPACE" && ls "$GITHUB_WORKSPACE/parlementaire-monitor-all-${{ github.ref_name }}.jar"
+
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
