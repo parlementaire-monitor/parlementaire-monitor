@@ -1,13 +1,41 @@
 services:
 
+  parlementaire-monitor:
+    image: nilsbrenkman/parlementaire-monitor:latest
+    restart: unless-stopped
+    ports:
+    - "8080:8080"
+    volumes:
+    - type: volume
+      source: resources
+      target: /data/resources
+    env_file: .env
+    user: 1000:1000
+    depends_on:
+      mongo:
+        condition: service_healthy
+
   mongo:
-    image: mongo
+    image: mongo:latest
     restart: unless-stopped
     ports:
     - "27017:27017"
-    volumes:
-    - data:/data/db
     env_file: .env
+    configs:
+    - source: mongod.conf
+      target: /data/configdb/mongod.conf
+    volumes:
+    - type: volume
+      source: database
+      target: /data/db
+    - type: tmpfs
+      target: /data/configdb
+    healthcheck:
+      test: [ CMD, /bin/bash, -c, mongosh --eval 'use admin']
+      interval: 10s
+      retries: 3
+      start_interval: 5s
+      start_period: 5s
 
   mongo-express:
     image: mongo-express
@@ -15,6 +43,17 @@ services:
     ports:
     - "8081:8081"
     env_file: .env
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+configs:
+  mongod.conf:
+    content: |
+      systemLog:
+        verbosity: 0
+        timeStampFormat: iso8601-local
 
 volumes:
-  data:
+  database:
+  resources:

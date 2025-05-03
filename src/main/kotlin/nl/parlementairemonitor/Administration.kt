@@ -9,8 +9,8 @@ import io.ktor.server.application.log
 import korlibs.time.DateFormat
 import nl.parlementairemonitor.task.QueueProcessorTask
 import nl.parlementairemonitor.task.SyncFeedTask
-import java.time.Duration
 import java.time.Instant
+import kotlin.time.Duration.Companion.milliseconds
 
 fun Application.configureAdministration() {
     install(TaskScheduling) {
@@ -23,8 +23,8 @@ fun Application.configureAdministration() {
             name = "SyncFeed"
             task = { taskExecutionTime ->
                 log.info("Starting SyncFeed task: ${taskExecutionTime.format(DateFormat.DEFAULT_FORMAT)}")
-                SyncFeedTask.INSTANCE.run()
-                val duration = Duration.ofMillis(Instant.now().toEpochMilli() - taskExecutionTime.unixMillisLong)
+                SyncFeedTask.run()
+                val duration = (Instant.now().toEpochMilli() - taskExecutionTime.unixMillisLong).milliseconds
                 log.info("Completed SyncFeed task in $duration")
             }
             kronSchedule = {
@@ -35,7 +35,7 @@ fun Application.configureAdministration() {
             }
             concurrency = 1
             monitor.subscribe(ApplicationStopped) {
-                SyncFeedTask.INSTANCE.stop()
+                SyncFeedTask.stop()
             }
         }
 
@@ -43,8 +43,8 @@ fun Application.configureAdministration() {
             name = "QueueProcessor"
             task = { taskExecutionTime ->
                 log.info("Starting QueueProcessor task: ${taskExecutionTime.format(DateFormat.DEFAULT_FORMAT)}")
-                QueueProcessorTask.INSTANCE.run()
-                val duration = Duration.ofMillis(Instant.now().toEpochMilli() - taskExecutionTime.unixMillisLong)
+                QueueProcessorTask.run()
+                val duration = (Instant.now().toEpochMilli() - taskExecutionTime.unixMillisLong).milliseconds
                 log.info("Completed QueueProcessor task in $duration")
             }
             kronSchedule = {
@@ -55,7 +55,7 @@ fun Application.configureAdministration() {
             }
             concurrency = 1
             monitor.subscribe(ApplicationStopped) {
-                QueueProcessorTask.INSTANCE.stop()
+                QueueProcessorTask.stop()
             }
         }
     }

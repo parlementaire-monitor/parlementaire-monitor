@@ -20,11 +20,7 @@ import nl.parlementairemonitor.util.SyncFeedUtil
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
 
-class SyncFeedTask private constructor() {
-
-    companion object {
-        val INSTANCE: SyncFeedTask = SyncFeedTask()
-    }
+object SyncFeedTask {
 
     private val log = LoggerFactory.getLogger(this::class.java)
 
@@ -34,14 +30,14 @@ class SyncFeedTask private constructor() {
     private var running: Boolean = false
     private var keepGoing: Boolean = true
 
-    suspend fun run(feed: String = "next") {
+    suspend fun run() {
         if (running) return
         synchronized(this) {
             if (running) return
             running = true
         }
         try {
-            updateSyncFeed(feed)
+            updateSyncFeed()
         } catch (e: Exception) {
             log.error("Failed to sync feed", e)
         } finally {
@@ -49,9 +45,9 @@ class SyncFeedTask private constructor() {
         }
     }
 
-    private suspend fun updateSyncFeed(feed: String) {
+    private suspend fun updateSyncFeed() {
         var feedUrl = database.getCollection("syncfeed", SyncFeed::class.java)
-            .find(Filters.eq("_id", feed))
+            .find(Filters.eq("_id", "next"))
             .firstOrNull()?.url ?: "${SyncFeedUtil.SYNC_FEED_BASE_URL}/Feed"
 
         var hasNext = true
@@ -79,8 +75,8 @@ class SyncFeedTask private constructor() {
                     hasNext = false
                 } else {
                     database.getCollection("syncfeed", SyncFeed::class.java).replaceOne(
-                        Filters.eq("_id", feed),
-                        SyncFeed(feed, nextUrl),
+                        Filters.eq("_id", "next"),
+                        SyncFeed("next", nextUrl),
                         ReplaceOptions().upsert(true)
                     )
                     feedUrl = nextUrl
