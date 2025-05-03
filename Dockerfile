@@ -16,9 +16,10 @@ RUN gradle buildFatJar --no-daemon
 
 # Stage 3: Create the Runtime Image
 FROM amazoncorretto:20 AS runtime
+RUN mkdir -p /app /data/resources
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/parlementaire-monitor.jar
+RUN chown -R 1000:1000 /app /data
 EXPOSE 8080
 VOLUME ["/data/resources"]
 USER 1000:1000
-RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/parlementaire-monitor.jar
 ENTRYPOINT ["java","-jar","/app/parlementaire-monitor.jar"]
