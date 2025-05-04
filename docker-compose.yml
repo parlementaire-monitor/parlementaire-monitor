@@ -1,7 +1,7 @@
 services:
 
   parlementaire-monitor:
-    image: ghcr.io/parlementaire-monitor/parlementaire-monitor:workflow
+    image: parlementaire-monitor/parlementaire-monitor:latest
     restart: unless-stopped
     ports:
     - "8080:8080"

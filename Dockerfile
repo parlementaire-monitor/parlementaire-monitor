@@ -1,8 +1,22 @@
-FROM amazoncorretto:20
+# Stage 1: Cache Gradle dependencies
+FROM gradle:jdk21 AS build
+RUN mkdir -p /home/gradle
+ENV GRADLE_USER_HOME=/home/gradle
+COPY --chown=gradle:gradle build.gradle.kts gradle.properties settings.gradle.kts /home/gradle/
+COPY --chown=gradle:gradle src /home/gradle/src
+COPY --chown=gradle:gradle gradle /home/gradle/gradle
+WORKDIR /home/gradle
+RUN gradle installDist --no-daemon
+
+# Stage 2: Build Application
+FROM openjdk:21-bookworm
+RUN apt update && apt upgrade -y && apt install -y curl vim
+RUN useradd -M app
 RUN mkdir -p /app /data/resources
-COPY ParlementaireMonitor-all.jar /app/ParlementaireMonitor-all.jar
-RUN chown -R 1000:1000 /app /data
+RUN chown -R app:app /app /data
+COPY --from=build --chown=app:app /home/gradle/build/install/ParlementaireMonitor /app/
+RUN chmod +x /app/bin/ParlementaireMonitor
+
 EXPOSE 8080
 VOLUME ["/data/resources"]
-USER 1000:1000
-ENTRYPOINT ["java","-jar","/app/ParlementaireMonitor-all.jar"]
+ENTRYPOINT ["/app/bin/ParlementaireMonitor"]

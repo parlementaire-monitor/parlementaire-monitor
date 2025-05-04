@@ -1,4 +1,3 @@
-import io.ktor.plugin.features.DockerImageRegistry
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -17,7 +16,7 @@ plugins {
 }
 
 group = "nl.parlementairemonitor"
-version = "0.1.0"
+version = "v0.2.1"
 
 application {
     mainClass = "io.ktor.server.netty.EngineMain"
@@ -32,36 +31,10 @@ xjc {
 
 kotlin.compilerOptions.apiVersion = KotlinVersion.KOTLIN_2_1
 kotlin.compilerOptions.languageVersion = KotlinVersion.KOTLIN_2_1
-kotlin.compilerOptions.jvmTarget = JvmTarget.JVM_20
+kotlin.compilerOptions.jvmTarget = JvmTarget.JVM_21
 
-java.sourceCompatibility = JavaVersion.VERSION_20
-java.targetCompatibility = JavaVersion.VERSION_20
-
-jib {
-    dockerClient {
-        executable = "/usr/bin/docker"
-    }
-    from {
-        platforms {
-            platform {
-                architecture = "amd64"
-                os = "linux"
-            }
-            platform {
-                architecture = "arm64"
-                os = "linux"
-            }
-        }
-    }
-    to {
-        image = "nilsbrenkman/parlementaire-monitor"
-        tags = setOf("$version")
-    }
-    container {
-        user = "1000:1000"
-        mainClass = "io.ktor.server.netty.EngineMain"
-    }
-}
+java.sourceCompatibility = JavaVersion.VERSION_21
+java.targetCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
