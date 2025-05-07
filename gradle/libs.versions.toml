@@ -1,0 +1,61 @@
+[versions]
+jackson = "2.19.0"
+jakarta = "4.0.2"
+jaxb = "4.0.5"
+junit5 = "5.12.2"
+kotlin = "2.1.20"
+ktor = "3.1.3"
+log4j = "2.24.3"
+logback = "1.5.18"
+mongo = "5.4.0"
+openapi = "5.0.2"
+pdfbox = "2.0.34"
+poi = "5.4.1"
+prometheus = "1.6.13"
+rome = "2.1.0"
+schema-kenerator = "2.1.2"
+task-scheduling = "2.1.2"
+
+[libraries]
+jackson-module-jaxb-annotations = { group = "com.fasterxml.jackson.module", name = "jackson-module-jaxb-annotations", version.ref = "jackson" }
+jakarta-xml-bind-api = { group = "jakarta.xml.bind", name = "jakarta.xml.bind-api", version.ref = "jakarta" }
+jaxb-runtime = { group = "org.glassfish.jaxb", name = "jaxb-runtime", version.ref = "jaxb" }
+ktor-client-java = { group = "io.ktor", name = "ktor-client-java" }
+ktor-openapi = { group = "io.github.smiley4", name = "ktor-openapi", version.ref = "openapi" }
+ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json" }
+ktor-server-auth = { group = "io.ktor", name = "ktor-server-auth" }
+ktor-server-call-logging = { group = "io.ktor", name = "ktor-server-call-logging" }
+ktor-server-compression = { group = "io.ktor", name = "ktor-server-compression" }
+ktor-server-config-yaml = { group = "io.ktor", name = "ktor-server-config-yaml" }
+ktor-server-content-negotiation = { group = "io.ktor", name = "ktor-server-content-negotiation" }
+ktor-server-core = { group = "io.ktor", name = "ktor-server-core" }
+ktor-server-forwarded-header = { group = "io.ktor", name = "ktor-server-forwarded-header" }
+ktor-server-metrics-micrometer = { group = "io.ktor", name = "ktor-server-metrics-micrometer" }
+ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty" }
+#ktor-server-openapi = { group = "io.ktor", name = "ktor-server-openapi" }
+ktor-server-swagger = { group = "io.ktor", name = "ktor-server-swagger" }
+ktor-server-task-scheduling-core = { group = "io.github.flaxoos", name = "ktor-server-task-scheduling-core", version.ref = "task-scheduling" }
+ktor-server-task-scheduling-mongodb = { group = "io.github.flaxoos", name = "ktor-server-task-scheduling-mongodb", version.ref = "task-scheduling" }
+ktor-swagger-ui = { group = "io.github.smiley4", name = "ktor-swagger-ui", version.ref = "openapi" }
+log4j-to-slf4j = { group = "org.apache.logging.log4j", name = "log4j-to-slf4j", version.ref = "log4j" }
+logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
+micrometer-registry-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus", version.ref = "prometheus" }
+mongodb-bson = { group = "org.mongodb", name = "bson", version.ref = "mongo" }
+mongodb-driver-core = { group = "org.mongodb", name = "mongodb-driver-core", version.ref = "mongo" }
+mongodb-driver-sync = { group = "org.mongodb", name = "mongodb-driver-sync", version.ref = "mongo" }
+pdfbox = { group = "org.apache.pdfbox", name = "pdfbox", version.ref = "pdfbox" }
+poi = { group = "org.apache.poi", name = "poi", version.ref = "poi" }
+poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" }
+poi-scratchpad = { group = "org.apache.poi", name = "poi-scratchpad", version.ref = "poi" }
+rome = { group = "com.rometools", name = "rome", version.ref = "rome" }
+schema-kenerator-core = { group = "io.github.smiley4", name = "schema-kenerator-core", version.ref = "schema-kenerator" }
+schema-kenerator-swagger = { group = "io.github.smiley4", name = "schema-kenerator-swagger", version.ref = "schema-kenerator" }
+
+junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit5" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher" }
+
+[plugins]
+#ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
+#serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+#xjc = { id = "org.unbroken-dome.xjc", version = "2.0.0" }

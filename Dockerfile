@@ -19,4 +19,5 @@ RUN chmod +x /app/bin/ParlementaireMonitor
 
 EXPOSE 8080
 VOLUME ["/data/resources"]
+HEALTHCHECK CMD ["/bin/bash", "-c", " curl http://localhost:8080/healthz || exit 1"]
 ENTRYPOINT ["/app/bin/ParlementaireMonitor"]
